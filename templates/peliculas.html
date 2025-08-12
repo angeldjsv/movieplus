@@ -15,22 +15,27 @@
   <select name="genero" id="genero">
     <option value="">Todos</option>
     <option value="accion" {% if request.GET.genero == "accion" %}selected{% endif %}>Acción</option>
-    <option value="comedia" {% if request.GET.genero == "comedia" %}selected{% endif %}>Comedia</option>
-    <option value="drama" {% if request.GET.genero == "drama" %}selected{% endif %}>Drama</option>
-    <option value="terror" {% if request.GET.genero == "terror" %}selected{% endif %}>Terror</option>
-    <option value="ciencia_ficcion" {% if request.GET.genero == "ciencia_ficcion" %}selected{% endif %}>Ciencia Ficción</option>
-    <option value="animacion" {% if request.GET.genero == "animacion" %}selected{% endif %}>Animación</option>
+    <option value="animacion" {% if request.GET.genero == "animacion" %}selected{% endif %}>Animación</option> 
+    <option value="aventura" {% if request.GET.genero == "aventura" %}selected{% endif %}>Aventura</option> 
+    <option value="biografia" {% if request.GET.genero == "biografia" %}selected{% endif %}>Biografía</option> 
+    <option value="ciencia_ficcion" {% if request.GET.genero == "ciencia_ficcion" %}selected{% endif %}>Ciencia Ficción</option> 
+    <option value="crimen" {% if request.GET.genero == "crimen" %}selected{% endif %}>Crimen</option>
+    <option value="comedia" {% if request.GET.genero == "comedia" %}selected{% endif %}>Comedia</option> 
+    <option value="deporte" {% if request.GET.genero == "deporte" %}selected{% endif %}>Deporte</option> 
+    <option value="documental" {% if request.GET.genero == "documental" %}selected{% endif %}>Documental</option> 
+    <option value="drama" {% if request.GET.genero == "drama" %}selected{% endif %}>Drama</option> 
+    <option value="fantasia" {% if request.GET.genero == "fantasia" %}selected{% endif %}>Fantasía</option> 
+    <option value="guerra" {% if request.GET.genero == "guerra" %}selected{% endif %}>Guerra</option> 
+    <option value="historia" {% if request.GET.genero == "historia" %}selected{% endif %}>Historia</option> 
+    <option value="misterio" {% if request.GET.genero == "misterio" %}selected{% endif %}>Misterio</option> 
+    <option value="musical" {% if request.GET.genero == "musical" %}selected{% endif %}>Musical</option> 
     <option value="romance" {% if request.GET.genero == "romance" %}selected{% endif %}>Romance</option>
-    <option value="documental" {% if request.GET.genero == "documental" %}selected{% endif %}>Documental</option>
-    <option value="aventura" {% if request.GET.genero == "aventura" %}selected{% endif %}>Aventura</option>
-    <option value="fantasia" {% if request.GET.genero == "fantasia" %}selected{% endif %}>Fantasía</option>
-    <option value="misterio" {% if request.GET.genero == "misterio" %}selected{% endif %}>Misterio</option>
-    <option value="historia" {% if request.GET.genero == "historia" %}selected{% endif %}>Historia</option>
-    <option value="musical" {% if request.GET.genero == "musical" %}selected{% endif %}>Musical</option>
-    <option value="biografia" {% if request.GET.genero == "biografia" %}selected{% endif %}>Biografía</option>
-    <option value="deporte" {% if request.GET.genero == "deporte" %}selected{% endif %}>Deporte</option>
-    <option value="guerra" {% if request.GET.genero == "guerra" %}selected{% endif %}>Guerra</option>
-  </select>
+    <option value="superheroes" {% if request.GET.genero == "superheroes" %}selected{% endif %}>Superhéroes</option>
+    <option value="suspenso" {% if request.GET.genero == "suspenso" %}selected{% endif %}>Suspenso</option> 
+    <option value="terror" {% if request.GET.genero == "terror" %}selected{% endif %}>Terror</option> 
+    <option value="thriller" {% if request.GET.genero == "thriller" %}selected{% endif %}>Thriller</option> 
+    <option value="western" {% if request.GET.genero == "western" %}selected{% endif %}>Western</option>
+  </select> 
 
   <label for="decada">Década:</label>
   <select name="decada" id="decada">
@@ -42,6 +47,15 @@
     <option value="1980" {% if request.GET.decada == "1980" %}selected{% endif %}>1980s</option>
     <option value="1970" {% if request.GET.decada == "1970" %}selected{% endif %}>1970s</option>
   </select>
+
+<label for="orden">Ordenar por:</label>
+<select name="orden" id="orden">
+  <option value="">Por defecto (Titulo A-Z)</option>
+  <option value="fecha_asc" {% if request.GET.orden == "fecha_asc" %}selected{% endif %}>Fecha de lanzamiento (ascendente)</option>
+  <option value="fecha_desc" {% if request.GET.orden == "fecha_desc" %}selected{% endif %}>Fecha de lanzamiento (descendente)</option>
+  <option value="titulo_asc" {% if request.GET.orden == "titulo_asc" %}selected{% endif %}>Título (A-Z)</option>
+  <option value="titulo_desc" {% if request.GET.orden == "titulo_desc" %}selected{% endif %}>Título (Z-A)</option>
+</select>
 
   <button type="submit">Filtrar</button>
 </form>
@@ -66,13 +80,19 @@
 <!-- 📄 Controles de paginación -->
 <div class="pagination">
   {% if page_obj.has_previous %}
-    <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
+    <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}
+             {% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}
+             {% if request.GET.orden %}orden={{ request.GET.orden }}&{% endif %}
+             page={{ page_obj.previous_page_number }}"> Anterior </a>
   {% endif %}
 
   <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
 
   {% if page_obj.has_next %}
-    <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a>
+    <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}
+             {% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}
+             {% if request.GET.orden %}orden={{ request.GET.orden }}&{% endif %}
+             page={{ page_obj.next_page_number }}"> Siguiente </a>
   {% endif %}
 </div>
 

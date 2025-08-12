@@ -19,6 +19,7 @@ class PeliculasPageView(TemplateView):
 
         genero = self.request.GET.get('genero')
         decada = self.request.GET.get('decada')
+        orden = self.request.GET.get('orden')
 
         peliculas = Pelicula.objects.all()
 
@@ -33,10 +34,18 @@ class PeliculasPageView(TemplateView):
             except ValueError:
                 pass
 
-        # 🔄 Ordenar por año ascendente
-        peliculas = peliculas.order_by('anio_lanzamiento')
+        # 🔄 Aplicar ordenamiento
+        if orden == "fecha_asc":
+            peliculas = peliculas.order_by('anio_lanzamiento')
+        elif orden == "fecha_desc":
+            peliculas = peliculas.order_by('-anio_lanzamiento')
+        elif orden == "titulo_desc":
+            peliculas = peliculas.order_by('-titulo')
+        else:
+            # Por defecto: título ascendente
+            peliculas = peliculas.order_by('titulo')
 
-        # 📄 Paginación: 5 películas por página
+        # Paginación
         paginator = Paginator(peliculas, 20)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
