@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView, CreateView
 from .models import Pelicula
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -59,3 +63,17 @@ class ForoPageView(TemplateView):
 
 class TopPageView(TemplateView):
     template_name = "top.html"
+
+class SignupView(FormView):
+    template_name = "signup.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+    
+class LoginView(DjangoLoginView):
+    template_name = 'login.html'
+    redirect_authenticated_user = True
+
