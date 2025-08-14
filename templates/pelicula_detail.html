@@ -1,0 +1,61 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="section-title">Detalles de la Película</h1>
+
+  <div class="card card-movie p-3 mb-4">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <img src="{{ pelicula.imagen.url }}" alt="{{ pelicula.titulo }}" class="img-fluid rounded">
+      </div>
+      <div class="col-md-8">
+        <h2>{{ pelicula.titulo }}</h2>
+        <p>{{ pelicula.descripcion }}</p>
+
+        <!-- Promedio de estrellas -->
+        <div class="star-display mb-2">
+          {% for i in "12345" %}
+            {% if forloop.counter <= pelicula.promedio_rating %}
+              <span class="text-warning">★</span>
+            {% else %}
+              <span class="text-muted">☆</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <!-- Botón para reseñar -->
+        <a href="{% url 'crear_review' pelicula.id %}" class="btn btn-primary-custom">Escribir reseña</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de reseñas -->
+  <h3 class="section-title">Reseñas</h3>
+  {% for review in pelicula.reviews.all %}
+    <div class="card mb-3 p-3">
+      <!-- Usuario y fecha -->
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <strong>{{ review.user.username }}</strong>
+        <small class="text-muted">{{ review.fecha_creacion|date:"d M Y" }}</small>
+      </div>
+
+      <!-- Estrellas -->
+      <div class="star-display mb-1">
+        {% for i in "12345" %}
+          {% if forloop.counter <= review.rating %}
+            <span class="text-warning">★</span>
+          {% else %}
+            <span class="text-muted">☆</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Comentario -->
+      <p>{{ review.comentario }}</p>
+    </div>
+  {% empty %}
+    <p class="text-muted">No hay reseñas aún.</p>
+  {% endfor %}
+</div>
+{% endblock %}

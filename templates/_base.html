@@ -23,8 +23,8 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{% url 'peliculas' %}">Películas</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'top' %}">Top 10</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'foro' %}">Foro</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">Contáctanos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reviews' %}">Reviews</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contactanos' %}">Contáctanos</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <form method="post" action="{% url 'logout' %}">
@@ -32,9 +32,12 @@
                                 <button type="submit" class="nav-link btn btn-link px-0 text-decoration-none">Cerrar sesión</button>
                             </form>
                         </li>
-                        <li class="nav-item">
-                            <span class="nav-link disabled">Hola, {{ user.username }}</span>
-                        </li>
+                        {% with user.profile as perfil %}
+                            <li class="nav-item d-flex align-items-center">
+                                <img src="{{ perfil.avatar.url }}" alt="Avatar" class="avatar-navbar me-2">
+                                <a class="nav-link" href="{% url 'my_profile' %}">Hola, {{ user.username }}</a>
+                            </li>
+                        {% endwith %}
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Registrarse</a></li>

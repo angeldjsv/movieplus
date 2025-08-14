@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, CreateView
-from .models import Pelicula
+from .forms import ProfileForm
+from .models import Pelicula, Review, Profile
+from django import forms
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView
@@ -12,8 +15,8 @@ from django.urls import reverse_lazy
 class HomePageView(TemplateView):
     template_name = "home.html"
 
-class AboutPageView(TemplateView):
-    template_name = "about.html"
+class ContactanosPageView(TemplateView):
+    template_name = "contactanos.html"
 
 class PeliculasPageView(TemplateView):
     template_name = "peliculas.html"
@@ -58,8 +61,78 @@ class PeliculasPageView(TemplateView):
         return context
 
 
-class ForoPageView(TemplateView):
-    template_name = "foro.html"
+class ReviewsPageView(TemplateView):
+    template_name = "reviews.html"
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comentario']
+
+@login_required
+
+def pelicula_detail(request, pk):
+    pelicula = get_object_or_404(Pelicula, pk=pk)
+    reviews = pelicula.reviews.select_related('user__profile')
+
+    user_review = Review.objects.filter(pelicula=pelicula, user=request.user).first()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=user_review)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.pelicula = pelicula
+            review.user = request.user
+            review.save()
+            return redirect('pelicula_detail', pk=pelicula.pk)
+    else:
+        form = ReviewForm(instance=user_review)
+
+    return render(request, 'pelicula_detail.html', {
+        'pelicula': pelicula,
+        'reseñas': reviews,
+        'form': form
+    })
+
+@login_required
+def crear_review(request, pk):
+    pelicula = get_object_or_404(Pelicula, pk=pk)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.pelicula = pelicula
+            review.user = request.user
+            review.save()
+            return redirect('pelicula_detail', pk=pelicula.pk)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'crear_review.html', {
+        'form': form,
+        'pelicula': pelicula
+    })
+
+@login_required
+def my_profile(request):
+    perfil, _ = Profile.objects.get_or_create(user=request.user)
+    return render(request, 'my_profile.html', {'perfil': perfil})
+
+@login_required
+def editar_perfil(request):
+    # Verifica si el perfil existe, si no lo crea
+    perfil, creado = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            return redirect('editar_perfil')
+    else:
+        form = ProfileForm(instance=perfil)
+
+    return render(request, 'editar_perfil.html', {'form': form})
+
 
 class TopPageView(TemplateView):
     template_name = "top.html"

@@ -1,0 +1,153 @@
+/* === Variables personalizadas === */
+:root {
+  --primary-color: #1e2a38;
+  --accent-color: #ff6b00;
+  --font-main: 'Roboto', sans-serif;
+  --text-color: #212529;
+  --bg-light: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* === Reset y ajustes generales === */
+body {
+  font-family: var(--font-main);
+  background-color: #f8f9fa;
+  color: var(--text-color);
+}
+
+/* === Navbar === */
+.navbar-custom {
+  background-color: var(--primary-color);
+}
+.navbar-custom .nav-link {
+  color: white;
+}
+.navbar-custom .nav-link:hover {
+  color: var(--accent-color);
+}
+
+/* === Navbar: Avatar del usuario === */
+.avatar-navbar {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  margin-right: 8px;
+  border: 2px solid var(--accent-color);
+}
+
+/* === Perfil: Avatar grande === */
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border: 2px solid #ccc;
+}
+
+/* === Contenedor de perfil === */
+.perfil-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: var(--bg-light);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+/* === Títulos de sección === */
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+/* === Tarjetas de películas === */
+.card-movie {
+  border: none;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease;
+}
+.card-movie:hover {
+  transform: scale(1.02);
+}
+.card-movie img {
+  border-radius: 5px;
+}
+
+/* === Botones personalizados === */
+.btn-primary {
+  background-color: var(--accent-color);
+  border: none;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #e65c00;
+}
+
+/* === Estrellas visuales === */
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+  gap: 4px;
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  font-size: 28px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f5b301;
+}
+
+.star-display span {
+  font-size: 24px;
+}
+
+/* === Secciones futuras === */
+.section-card {
+  background-color: var(--bg-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+}
+
+.review-box {
+  background-color: #fff8f0;
+  padding: 16px;
+  border-left: 4px solid var(--accent-color);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.contact-form button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+.contact-form button:hover {
+  background-color: #e65c00;
+}
+
+.avatar-navbar {
+  background-color: red !important;
+}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="perfil-container">
+  <h2>Mi Perfil</h2>
+  <img src="{{ perfil.avatar.url }}" alt="Avatar" class="avatar-img">
+  <p><strong>Usuario:</strong> {{ perfil.user.username }}</p>
+  <p><strong>Email:</strong> {{ perfil.user.email }}</p>
+  <p><strong>Biografía:</strong> {{ perfil.bio|default:"Sin biografía aún." }}</p>
+  <a href="{% url 'editar_perfil' %}" class="btn btn-primary">Editar Perfil</a>
+</div>
+{% endblock %}

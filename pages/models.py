@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import datetime
 
@@ -25,7 +27,9 @@ class Pelicula(models.Model):
         ('terror', 'Terror'),
         ('thriller', 'Thriller'),
         ('western', 'Western'),
+
         # Aca podemos seguir añadiendo géneros
+
         ('otro', 'Otro'),
     ]
 
@@ -41,11 +45,38 @@ class Pelicula(models.Model):
     )
     director = models.CharField(max_length=100, default='Desconocido')
     genero = models.CharField(max_length=20, choices=GENEROS_CHOICES, default='otro')
-    puntuacion = models.DecimalField(max_digits=2, decimal_places=1)
+    puntuacion = models.DecimalField(
+        max_digits=3, 
+        decimal_places=1,
+        validators=[MinValueValidator(0.5), MaxValueValidator(5.0)],
+        default=3.0,
+    )
 
     def __str__(self):
         return self.titulo
+    
+User = get_user_model()
+    
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', default='avatars/default.jpg', blank=True, null=True)
+    bio = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
+    
+class Review(models.Model):
+    pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.DecimalField(
+        max_digits=2, 
+        decimal_places=1,
+        validators=[MinValueValidator(0.5), MaxValueValidator(5.0)]
+    )
+    comentario = models.TextField(blank=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Review de {self.user.username} sobre {self.pelicula.titulo} - Rating: ⭐{self.rating}"
 
 # Create your models here.
