@@ -28,7 +28,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'peliculas' %}">Películas</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'top' %}">Top 10</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'reviews' %}">Reviews</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contactanos' %}">Contáctanos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'acerca' %}">Acerca</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <form method="post" action="{% url 'logout' %}">
@@ -67,13 +67,13 @@
 
     <footer class="footer mt-5 py-4 text-center">
         <div class="social-icons">
-            <a href="https://www.instagram.com" target="_blank" class="social-link">
+            <a href="https://www.instagram.com/movie.plus.ve?igsh=MWpqMGxlNHJ1Mm5xNA%3D%3D&utm_source=qr" target="_blank" class="social-link">
                 <i class="fab fa-instagram"></i>
             </a>
-            <a href="https://www.tiktok.com" target="_blank" class="social-link">
+            <a href="https://www.tiktok.com/@movie.plus.ve?_t=ZM-8yrbSKU1XqI&_r=1" target="_blank" class="social-link">
                 <i class="fab fa-tiktok"></i>
             </a>
-            <a href="https://www.twitter.com" target="_blank" class="social-link">
+            <a href="https://x.com/movieplus_ve?s=21" target="_blank" class="social-link">
                 <i class="fab fa-x-twitter"></i>
             </a>
         </div>

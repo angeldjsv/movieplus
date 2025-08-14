@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from .views import (
                     HomePageView,
-                    ContactanosPageView,
+                    AcercaPageView,
                     PeliculasPageView, 
                     ReviewsPageView, 
                     TopPageView,
@@ -17,7 +17,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
-    path('contactanos/', ContactanosPageView.as_view(), name='contactanos'),
+    path('acerca/', AcercaPageView.as_view(), name='acerca'),
     path('peliculas/', PeliculasPageView.as_view(), name='peliculas'),
     path('reviews/', ReviewsPageView.as_view(), name='reviews'),
     path('top/', TopPageView.as_view(), name='top'),

@@ -415,4 +415,17 @@ a.btn-ver-mas:hover {
 }
 
 
+/* =================================================
+ Sección Acerca de MoviePlus 
+ ================================================== */
+.acerca-card {
+  background-color: #1a1a1a;
+  box-shadow: var(--card-shadow);
+}
 
+.acerca-text {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}

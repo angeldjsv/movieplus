@@ -15,8 +15,8 @@ from django.urls import reverse_lazy
 class HomePageView(TemplateView):
     template_name = "home.html"
 
-class ContactanosPageView(TemplateView):
-    template_name = "contactanos.html"
+class AcercaPageView(TemplateView):
+    template_name = "acerca.html"
 
 class PeliculasPageView(TemplateView):
     template_name = "peliculas.html"
