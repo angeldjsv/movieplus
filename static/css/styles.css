@@ -320,3 +320,99 @@ a.btn-ver-mas:hover {
   color: #a8f5c4;
   font-size: 1rem;
 }
+
+/* ====================================================
+   🏷️ FOOTER
+==================================================== */
+.footer {
+  background-color: #0f0f0f;
+  color: #ccc;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.social-link {
+  font-size: 1.8rem;
+  color: #00E676;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--hover-color);
+  transform: scale(1.2);
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* ====================================================
+   🤳 CONTACTANOS
+==================================================== */
+.contact-card {
+  background-color: #1a1a1a;
+  box-shadow: var(--card-shadow);
+  border: 1px solid #2e7d32;
+}
+
+.text-accent {
+  color: #a8f5c4;
+}
+
+.contact-block {
+  padding: 2rem 1rem;
+}
+
+.contact-email {
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.email-link {
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 0.1rem;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.email-link:hover {
+  color: var(--hover-color);
+  border-color: var(--hover-color);
+}
+
+.contact-email i {
+  transition: transform 0.3s ease;
+}
+
+.contact-email:hover i {
+  transform: scale(1.2);
+}
+
+/* ====================================================
+   📱 REDES SOCIALES
+==================================================== */
+
+.social-icon {
+  font-size: 2rem;
+  color: #15a560;
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.2);
+  color: #15a560;
+}
+
+.icon-uniform {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+
+

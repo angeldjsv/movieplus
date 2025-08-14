@@ -1,6 +1,28 @@
 {% extends "_base.html" %}
-
 {% block content %}
-<h1>About Page</h1>
-<p>Welcome to the About page of MOVIE+!</p>
-{% endblock %}  
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="contact-card p-5 rounded-4">
+        <h2 class="text-center mb-4 text-accent">Contáctanos</h2>
+
+        <div class="contact-block text-center mb-4">
+            <p class="contact-email mb-0">
+                <i class="bi bi-envelope-fill me-2 text-accent"></i>
+                <strong>Email:</strong>
+                <a href="mailto:contacto@movieplus.com" class="email-link">contacto@movieplus.com</a>
+            </p>
+        </div>
+
+            <h5 class="mt-4 mb-3 text-accent text-center">Síguenos en nuestras redes:</h5>
+            <div class="d-flex justify-content-center gap-4">
+                <a href="https://www.instagram.com/movie.plus.ve?igsh=MWpqMGxlNHJ1Mm5xNA%3D%3D&utm_source=qr" class="text-accent social-icon"><i class="fab fa-instagram fs-3"></i></a>
+                <a href="https://www.tiktok.com/@movie.plus.ve?_t=ZM-8yrbSKU1XqI&_r=1" class="text-accent social-icon"><i class="fab fa-tiktok fs-3"></i></a>
+                <a href="https://x.com/movieplus_ve?s=21" class="text-accent social-icon"><i class="fab fa-x-twitter fs-3"></i></a>
+
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
