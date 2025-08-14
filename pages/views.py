@@ -53,7 +53,7 @@ class PeliculasPageView(TemplateView):
             peliculas = peliculas.order_by('titulo')
 
         # Paginación
-        paginator = Paginator(peliculas, 20)
+        paginator = Paginator(peliculas, 15) # 15 películas por página
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 

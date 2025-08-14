@@ -1,90 +1,108 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<h1>Películas!</h1>
 
-{% if user.is_authenticated %}
-<h3>Bienvenido, {{ user.username }}!</h3>
-{% else %}
-<h3>Bienvenido a MOVIE+! Por favor, <a href="{% url 'login' %}">inicia sesión</a> o <a href="{% url 'signup' %}">regístrate</a>.</h3>
-{% endif %}
+<div class="bienvenida-box mb-4 p-4 rounded">
+  {% if user.is_authenticated %}
+    <h3 class="bienvenida-titulo">¡Bienvenido de nuevo, {{ user.username }}!</h3>
+    <p class="bienvenida-texto">Explora nuevas películas, filtra por género o década y encuentra tu próxima favorita!</p>
+  {% else %}
+    <h2 class="bienvenida-titulo">🎬 Bienvenido a <span class="marca">MOVIE+</span></h2>
+    <p class="bienvenida-texto">
+      Para disfrutar de todas las funciones, <a href="{% url 'login' %}" class="bienvenida-link">inicia sesión</a> o <a href="{% url 'signup' %}" class="bienvenida-link">regístrate</a>.
+    </p>
+  {% endif %}
+</div>
 
 <!-- 🔍 Formulario de filtros -->
-<form method="get">
-    <label for="genero">Género:</label>
-    <select name="genero" id="genero">
-        <option value="">Todos</option>
-        <option value="accion" {% if request.GET.genero == "accion" %}selected{% endif %}>Acción</option>
-        <option value="comedia" {% if request.GET.genero == "comedia" %}selected{% endif %}>Comedia</option>
-        <option value="drama" {% if request.GET.genero == "drama" %}selected{% endif %}>Drama</option>
-        <option value="terror" {% if request.GET.genero == "terror" %}selected{% endif %}>Terror</option>
-        <option value="ciencia_ficcion" {% if request.GET.genero == "ciencia_ficcion" %}selected{% endif %}>Ciencia Ficción</option>
-        <option value="animacion" {% if request.GET.genero == "animacion" %}selected{% endif %}>Animación</option>
-        <option value="romance" {% if request.GET.genero == "romance" %}selected{% endif %}>Romance</option>
-        <option value="documental" {% if request.GET.genero == "documental" %}selected{% endif %}>Documental</option>
-        <option value="aventura" {% if request.GET.genero == "aventura" %}selected{% endif %}>Aventura</option>
-        <option value="fantasia" {% if request.GET.genero == "fantasia" %}selected{% endif %}>Fantasía</option>
-        <option value="misterio" {% if request.GET.genero == "misterio" %}selected{% endif %}>Misterio</option>
-        <option value="historia" {% if request.GET.genero == "historia" %}selected{% endif %}>Historia</option>
-        <option value="musical" {% if request.GET.genero == "musical" %}selected{% endif %}>Musical</option>
-        <option value="biografia" {% if request.GET.genero == "biografia" %}selected{% endif %}>Biografía</option>
-        <option value="deporte" {% if request.GET.genero == "deporte" %}selected{% endif %}>Deporte</option>
-        <option value="guerra" {% if request.GET.genero == "guerra" %}selected{% endif %}>Guerra</option>
-    </select>
+<div class="bg-dark p-4 rounded mb-4 filtros-container">
+    <h5 class="text-accent mb-3">🎬 Filtra tu búsqueda</h5>
 
-    <label for="decada">Década:</label>
-    <select name="decada" id="decada">
-        <option value="2020" {% if request.GET.decada == "2020" %}selected{% endif %}>2020s</option>
-        <option value="">Todas</option>
-        <option value="2000" {% if request.GET.decada == "2000" %}selected{% endif %}>2000s</option>
-        <option value="2010" {% if request.GET.decada == "2010" %}selected{% endif %}>2010s</option>
-        <option value="1980" {% if request.GET.decada == "1980" %}selected{% endif %}>1980s</option>
-        <option value="1990" {% if request.GET.decada == "1990" %}selected{% endif %}>1990s</option>
-        <option value="1970" {% if request.GET.decada == "1970" %}selected{% endif %}>1970s</option>
-    </select>
 
-    <button type="submit">Filtrar</button>
-</form>
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-6 col-lg-4">
+            <label for="genero" class="form-label text-light">Género:</label>
+            <select name="genero" id="genero" class="form-select">
+                <option value="">Todos</option>
+                <option value="accion" {% if request.GET.genero == "accion" %}selected{% endif %}>Acción</option>
+                <option value="comedia" {% if request.GET.genero == "comedia" %}selected{% endif %}>Comedia</option>
+                <option value="drama" {% if request.GET.genero == "drama" %}selected{% endif %}>Drama</option>
+                <option value="terror" {% if request.GET.genero == "terror" %}selected{% endif %}>Terror</option>
+                <option value="ciencia_ficcion" {% if request.GET.genero == "ciencia_ficcion" %}selected{% endif %}>Ciencia Ficción</option>
+                <option value="animacion" {% if request.GET.genero == "animacion" %}selected{% endif %}>Animación</option>
+                <option value="romance" {% if request.GET.genero == "romance" %}selected{% endif %}>Romance</option>
+                <option value="documental" {% if request.GET.genero == "documental" %}selected{% endif %}>Documental</option>
+                <option value="aventura" {% if request.GET.genero == "aventura" %}selected{% endif %}>Aventura</option>
+                <option value="fantasia" {% if request.GET.genero == "fantasia" %}selected{% endif %}>Fantasía</option>
+                <option value="misterio" {% if request.GET.genero == "misterio" %}selected{% endif %}>Misterio</option>
+                <option value="historia" {% if request.GET.genero == "historia" %}selected{% endif %}>Historia</option>
+                <option value="musical" {% if request.GET.genero == "musical" %}selected{% endif %}>Musical</option>
+                <option value="biografia" {% if request.GET.genero == "biografia" %}selected{% endif %}>Biografía</option>
+                <option value="deporte" {% if request.GET.genero == "deporte" %}selected{% endif %}>Deporte</option>
+                <option value="guerra" {% if request.GET.genero == "guerra" %}selected{% endif %}>Guerra</option>
+            </select>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <label for="decada" class="form-label text-light">Década:</label>
+            <select name="decada" id="decada" class="form-select">
+                <option value="">Todas</option>
+                <option value="2020" {% if request.GET.decada == "2020" %}selected{% endif %}>2020s</option>
+                <option value="2000" {% if request.GET.decada == "2000" %}selected{% endif %}>2000s</option>
+                <option value="2010" {% if request.GET.decada == "2010" %}selected{% endif %}>2010s</option>
+                <option value="1980" {% if request.GET.decada == "1980" %}selected{% endif %}>1980s</option>
+                <option value="1990" {% if request.GET.decada == "1990" %}selected{% endif %}>1990s</option>
+                <option value="1970" {% if request.GET.decada == "1970" %}selected{% endif %}>1970s</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-lg-4 text-end">
+            <button type="submit" class="btn btn-accent w-100">Filtrar</button>
+        </div>
+    </form>
+</div>
 
 <!-- 🎬 Lista de películas filtradas -->
-<p>Películas:</p>
-<ul>
+<div class="container py-4">
+    <h4 class="mb-4">Películas:</h4>
+
     {% for pelicula in page_obj %}
-        <div class="card card-movie mb-3">
-            <div class="row g-0">
-                <div class="col-md-4">
+        <div class="card card-movie mb-4 shadow-sm">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-4 d-flex justify-content-center align-items-center poster-wrapper">
                     <a href="{% url 'pelicula_detail' pk=pelicula.pk %}">
-                        <img src="{{ pelicula.imagen.url }}" class="img-fluid rounded-start" alt="{{ pelicula.titulo }}">
+                        <img src="{{ pelicula.imagen.url }}" alt="{{ pelicula.titulo }}" class="poster-img">
                     </a>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{% url 'pelicula_detail' pk=pelicula.pk %}" class="text-decoration-none text-dark">
-                                {{ pelicula.titulo }}
-                            </a>
+                            <a href="{% url 'pelicula_detail' pk=pelicula.pk %}">{{ pelicula.titulo }}</a>
                         </h5>
-                        <p class="card-text">{{ pelicula.descripcion|truncatewords:25 }}</p>
-                        <p class="card-text"><small class="text-muted">{{ pelicula.anio_lanzamiento }}</small></p>
+                        <p class="card-text">{{ pelicula.descripcion|truncatewords:30 }}</p>
+                        <p class="card-text"><small>{{ pelicula.anio_lanzamiento }}</small></p>
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
-
-</ul>
+</div>
 
 <!-- 📄 Controles de paginación -->
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
-    {% endif %}
+<div class="paginacion-box">
+  {% if page_obj.has_previous %}
+    <a class="paginacion-btn" href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.previous_page_number }}">⟵ Anterior</a>
+  {% else %}
+    <span class="paginacion-btn disabled">⟵ Anterior</span>
+  {% endif %}
 
-    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+  <span class="paginacion-info">Página <strong>{{ page_obj.number }}</strong> de <strong>{{ page_obj.paginator.num_pages }}</strong></span>
 
-    {% if page_obj.has_next %}
-        <a href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a>
-    {% endif %}
+  {% if page_obj.has_next %}
+    <a class="paginacion-btn" href="?{% if request.GET.genero %}genero={{ request.GET.genero }}&{% endif %}{% if request.GET.decada %}decada={{ request.GET.decada }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente ⟶</a>
+  {% else %}
+    <span class="paginacion-btn disabled">Siguiente ⟶</span>
+  {% endif %}
 </div>
 
 
