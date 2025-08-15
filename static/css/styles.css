@@ -3,7 +3,7 @@
 ==================================================== */
 :root {
   --primary-color: #1e2a38;
-  --accent-color: #ff6b00;
+  --accent-color: #64e930;
   --font-main: 'Roboto', sans-serif;
   --text-color: #212529;
   --bg-light: #ffffff;
@@ -58,9 +58,38 @@ body {
 /* ====================================================
    🔝 NAVBAR
 ==================================================== */
+main {
+  margin-top: 70px; /* ajusta según el alto real de tu navbar */
+}
+
+.text-accent {
+  color: #a8f5c4;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
 .navbar-custom {
   background-color: var(--primary-color);
 }
+
+.nav-link {
+  color: #ccc !important;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #a8f5c4 !important;
+}
+
 .navbar-custom .nav-link {
   color: white;
 }
@@ -100,6 +129,19 @@ body {
   background-color: var(--bg-light);
   border-radius: 8px;
   box-shadow: var(--card-shadow);
+}
+
+/* ====================================================
+DROPDWOWN DEL USARIO
+==================================================== */
+
+.dropdown-menu {
+  background-color: #1a1a1a;
+}
+
+.dropdown-item:hover {
+  background-color: #2a2a2a;
+  color: var(--accent-color);
 }
 
 /* ====================================================
@@ -178,6 +220,30 @@ a.btn-ver-mas:hover {
   object-fit: scale-down;
   border-radius: 8px;
   display: block;
+}
+
+
+/* ====================================================
+   🏆 PELÍCULAS DETALLE
+==================================================== */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+.card-movie {
+  background-color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+}
+
+.star-display span {
+  font-size: 1.2rem;
 }
 
 /* ====================================================

@@ -1,12 +1,23 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-  <h2>Escribir reseña para {{ pelicula.titulo }}</h2>
-  <form method="post">
+<div class="container mt-5 text-light">
+  <h2 class="mb-4">📝 Reseña para <span class="text-success">{{ pelicula.titulo }}</span></h2>
+
+  <form method="post" class="bg-dark p-4 rounded-4 border border-secondary shadow-sm">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Enviar reseña</button>
+
+    <div class="mb-3">
+        {{ form.comentario.label_tag }}
+        {{ form.comentario }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.rating.label_tag }}
+      {{ form.rating }}
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Enviar reseña</button>
   </form>
 </div>
 {% endblock %}

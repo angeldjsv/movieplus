@@ -9,7 +9,7 @@ from .views import (
                     LoginView, 
                     pelicula_detail,
                     editar_perfil,
-                    my_profile
+                    my_profile,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,6 +26,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('peliculas/<int:pk>/', pelicula_detail, name='pelicula_detail'),
     path('peliculas/<int:pk>/review/', views.crear_review, name='crear_review'),
-    path('my_profile/', views.my_profile, name='my_profile'),
+    path('my_profile/', my_profile, name='my_profile'),
     path('editar_perfil/', editar_perfil, name='editar_perfil'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

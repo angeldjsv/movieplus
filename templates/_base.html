@@ -18,28 +18,48 @@
 
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark text-light" style="padding-top:70px;">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">🎬 MoviePlus</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Logo a la izquierda -->
+            <a class="navbar-brand d-flex align-items-center text-accent" href="{% url 'home' %}">
+                <img src="{% static 'img/logo.png' %}" alt="Logo" style="height: 38px;" class="me-2">
+            </a>
+
+            <!-- Botón hamburguesa -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenido colapsable -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Secciones centradas -->
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{% url 'peliculas' %}">Películas</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'top' %}">Top 10</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'reviews' %}">Reviews</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'acerca' %}">Acerca</a></li>
+                </ul>
+
+                <!-- Usuario a la derecha -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <form method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="nav-link btn btn-link px-0 text-decoration-none">Cerrar sesión</button>
-                            </form>
-                        </li>
                         {% with user.profile as perfil %}
-                            <li class="nav-item d-flex align-items-center">
-                                <img src="{{ perfil.avatar.url }}" alt="Avatar" class="avatar-navbar me-2">
-                                <a class="nav-link" href="{% url 'my_profile' %}">Hola, {{ user.username }}</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="{{ perfil.avatar.url }}" alt="Avatar" class="rounded-circle border border-success me-2" style="width: 32px; height: 32px;">
+                                    {{ user.username }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end bg-dark border-0 shadow" aria-labelledby="perfilDropdown">
+                                    <li><a class="dropdown-item text-light" href="{% url 'my_profile' %}">Mi perfil</a></li>
+                                    <li>
+                                        <form method="post" action="{% url 'logout' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item text-light">Cerrar sesión</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         {% endwith %}
                     {% else %}
@@ -51,7 +71,8 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+
+    <div class="container mt-5">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -61,7 +82,9 @@
             {% endfor %}
         {% endif %}
 
+
         {% block content %}
+
         {% endblock %}
     </div>
 

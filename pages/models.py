@@ -1,8 +1,10 @@
 from django.db import models
+from django.db.models import Model, Avg
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import datetime
+from math import floor
 
 class Pelicula(models.Model):
     GENEROS_CHOICES = [
@@ -39,8 +41,8 @@ class Pelicula(models.Model):
     anio_lanzamiento = models.IntegerField(
         default=2000,
         validators=[
-            MinValueValidator(1850),  # Primera película registrada
-            MaxValueValidator(datetime.now().year)  # Año actual
+            MinValueValidator(1850),
+            MaxValueValidator(datetime.now().year)
         ]
     )
     director = models.CharField(max_length=100, default='Desconocido')
@@ -54,7 +56,30 @@ class Pelicula(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    @property
+    def promedio_rating(self):
+        promedio = self.reviews.aggregate(promedio=Avg('rating'))['promedio']
+        return round(promedio, 1) if promedio is not None else 0
     
+    @property
+    def estrellas_completas(self):
+        return floor(self.promedio_rating)
+
+    @property
+    def media_estrella(self):
+        resto = self.promedio_rating - self.estrellas_completas
+        return 1 if 0.25 <= resto < 0.75 else 0
+
+    @property
+    def estrellas_vacias(self):
+        return 5 - self.estrellas_completas - self.media_estrella
+    
+    @property
+    def total_reviews(self):
+        return self.reviews.count()
+
+
 User = get_user_model()
     
 class Profile(models.Model):
@@ -64,7 +89,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
-    
+
 class Review(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

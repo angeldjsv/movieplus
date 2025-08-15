@@ -1,61 +1,121 @@
 {% extends '_base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-  <h1 class="section-title">Detalles de la Película</h1>
+<div class="container mt-5 pt-4">
+  <!-- Título principal -->
+  <h1 class="section-title text-accent mb-4">Detalles de la Película</h1>
 
-  <div class="card card-movie p-3 mb-4">
-    <div class="row g-3">
-      <div class="col-md-4">
-        <img src="{{ pelicula.imagen.url }}" alt="{{ pelicula.titulo }}" class="img-fluid rounded">
+  <!-- Tarjeta principal -->
+  <div class="card bg-dark text-light border-0 shadow-sm p-4 mb-5">
+    <div class="row g-4 align-items-center">
+      <!-- Imagen -->
+      <div class="col-md-4 text-center">
+        <img src="{{ pelicula.imagen.url }}" alt="{{ pelicula.titulo }}" class="img-fluid rounded shadow">
       </div>
+
+      <!-- Detalles -->
       <div class="col-md-8">
-        <h2>{{ pelicula.titulo }}</h2>
-        <p>{{ pelicula.descripcion }}</p>
+        <h2 class="mb-2">{{ pelicula.titulo }}</h2>
+        <p class="text-muted mb-3">{{ pelicula.anio }} • {{ pelicula.duracion }} min • {{ pelicula.genero }}</p>
+        <p class="mb-4">{{ pelicula.descripcion }}</p>
 
-        <!-- Promedio de estrellas -->
-        <div class="star-display mb-2">
-          {% for i in "12345" %}
-            {% if forloop.counter <= pelicula.promedio_rating %}
-              <span class="text-warning">★</span>
-            {% else %}
-              <span class="text-muted">☆</span>
-            {% endif %}
-          {% endfor %}
-        </div>
+<!-- Promedio de estrellas con SVG -->
+<div class="star-display d-flex gap-1">
+  {% for i in "12345" %}
+    {% if forloop.counter <= pelicula.estrellas_completas %}
+      <!-- Estrella completa -->
+      <svg width="24" height="24" fill="#ffc107" viewBox="0 0 24 24">
+        <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+      </svg>
+    {% elif forloop.counter == pelicula.estrellas_completas|add:1 and pelicula.media_estrella %}
+      <!-- Media estrella -->
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <defs>
+          <linearGradient id="half">
+            <stop offset="50%" stop-color="#ffc107"/>
+            <stop offset="50%" stop-color="#e4e5e9"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#half)" d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+      </svg>
+    {% else %}
+      <!-- Estrella vacía -->
+      <svg width="24" height="24" fill="#e4e5e9" viewBox="0 0 24 24">
+        <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+      </svg>
+    {% endif %}
+  {% endfor %}
+</div>
 
-        <!-- Botón para reseñar -->
-        <a href="{% url 'crear_review' pelicula.id %}" class="btn btn-primary-custom">Escribir reseña</a>
+{% if pelicula.total_reviews > 0 %}
+  <p class="text-muted small mt-1">
+    {{ pelicula.promedio_rating|floatformat:1 }} / 5 basado en {{ pelicula.total_reviews }} reseñas
+  </p>
+{% else %}
+  <p class="text-muted small mt-1">Sé el primero en calificar esta película</p>
+{% endif %}
+
+
+        <!-- Botón reseña -->
+        <a href="{% url 'crear_review' pelicula.id %}" class="btn btn-outline-success">Escribir reseña</a>
       </div>
     </div>
   </div>
 
   <!-- Sección de reseñas -->
-  <h3 class="section-title">Reseñas</h3>
-  {% for review in pelicula.reviews.all %}
-    <div class="card mb-3 p-3">
-      <!-- Usuario y fecha -->
-      <div class="d-flex align-items-center gap-2 mb-1">
-        <strong>{{ review.user.username }}</strong>
-        <small class="text-muted">{{ review.fecha_creacion|date:"d M Y" }}</small>
+  <h3 class="section-title text-accent mb-3">Reseñas</h3>
+    {% for review in reseñas %}
+    <div class="card bg-dark text-light border border-success border-opacity-25 shadow-sm mb-4 p-3 rounded-4">
+      <!-- Usuario, avatar y fecha -->
+      <div class="d-flex align-items-center mb-3">
+        <!-- Avatar -->
+        <img src="{{ review.user.profile.avatar.url }}" alt="{{ review.user.username }}"
+            class="rounded-circle me-3 shadow-sm border border-secondary"
+            width="52" height="52" style="object-fit: cover;">
+
+        <!-- Nombre y fecha -->
+        <div>
+          <strong class="d-block text-light">{{ review.user.username }}</strong>
+          <small class="d-block" style="color: #a8d5ba; font-size: 0.85rem;">{{ review.fecha_creacion|date:"d M Y" }}</small>
+        </div>
       </div>
 
       <!-- Estrellas -->
-      <div class="star-display mb-1">
-        {% for i in "12345" %}
-          {% if forloop.counter <= review.rating %}
-            <span class="text-warning">★</span>
-          {% else %}
-            <span class="text-muted">☆</span>
-          {% endif %}
-        {% endfor %}
+      <div class="star-display d-flex gap-1 mb-2">
+        {% with ""|center:review.estrellas_completas as completas %}
+          {% for _ in completas %}
+            <svg width="20" height="20" fill="#ffc107" viewBox="0 0 24 24">
+              <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+            </svg>
+          {% endfor %}
+        {% endwith %}
+
+        {% if review.media_estrella %}
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="half-review">
+                <stop offset="50%" stop-color="#ffc107"/>
+                <stop offset="50%" stop-color="#e4e5e9"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#half-review)" d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+          </svg>
+        {% endif %}
+
+        {% with ""|center:review.estrellas_vacias as vacias %}
+          {% for _ in vacias %}
+            <svg width="20" height="20" fill="#e4e5e9" viewBox="0 0 24 24">
+              <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+            </svg>
+          {% endfor %}
+        {% endwith %}
       </div>
 
       <!-- Comentario -->
-      <p>{{ review.comentario }}</p>
+      <p class="mb-0 text-light">{{ review.comentario }}</p>
     </div>
-  {% empty %}
+    {% empty %}
     <p class="text-muted">No hay reseñas aún.</p>
   {% endfor %}
-</div>
+
 {% endblock %}

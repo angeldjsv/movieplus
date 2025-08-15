@@ -3,11 +3,13 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, CreateView
 from .forms import ProfileForm
 from .models import Pelicula, Review, Profile
+from math import floor
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView
+from django.db.models import Avg, Count
 from django.urls import reverse_lazy
 
 
@@ -69,14 +71,32 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['rating', 'comentario']
 
+
 @login_required
 
 def pelicula_detail(request, pk):
     pelicula = get_object_or_404(Pelicula, pk=pk)
-    reviews = pelicula.reviews.select_related('user__profile')
 
+    # Obtener reseñas como lista para poder modificarlas
+    reviews = list(pelicula.reviews.select_related('user__profile'))
+
+    # Calcular estrellas por reseña individual
+    for r in reviews:
+        r.estrellas_completas = int(r.rating)
+        resto = r.rating - r.estrellas_completas
+        r.media_estrella = 1 if 0.25 <= resto < 0.75 else 0
+        r.estrellas_vacias = 5 - r.estrellas_completas - r.media_estrella
+
+    # Obtener reseña del usuario actual (si existe)
     user_review = Review.objects.filter(pelicula=pelicula, user=request.user).first()
 
+    # Calcular estrellas para el promedio general
+    promedio = pelicula.promedio_rating or 0
+    estrellas_completas = floor(promedio)
+    media_estrella = 1 if 0.25 <= promedio - estrellas_completas < 0.75 else 0
+    estrellas_vacias = 5 - estrellas_completas - media_estrella
+
+    # Procesar formulario de reseña
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=user_review)
         if form.is_valid():
@@ -90,9 +110,14 @@ def pelicula_detail(request, pk):
 
     return render(request, 'pelicula_detail.html', {
         'pelicula': pelicula,
-        'reseñas': reviews,
-        'form': form
+        'reseñas': reviews,  # 👈 Este es el que debes usar en el template
+        'form': form,
+        'estrellas_completas': estrellas_completas,
+        'media_estrella': media_estrella,
+        'estrellas_vacias': estrellas_vacias,
     })
+
+
 
 @login_required
 def crear_review(request, pk):
@@ -149,4 +174,5 @@ class SignupView(FormView):
 class LoginView(DjangoLoginView):
     template_name = 'login.html'
     redirect_authenticated_user = True
+
 
