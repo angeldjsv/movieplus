@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView
 from django.db.models import Avg, Count
 from django.urls import reverse_lazy
+from datetime import datetime
 
 
 # Create your views here.
@@ -66,11 +67,23 @@ class PeliculasPageView(TemplateView):
 class ReviewsPageView(TemplateView):
     template_name = "reviews.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reseñas'] = Review.objects.all().order_by('-fecha_creacion')
+        return context
+
+
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'comentario']
 
+def calcular_estrellas(valor):
+    completas = int(valor)
+    resto = valor - completas
+    media = 1 if 0.25 <= resto < 0.75 else 0
+    vacías = 5 - completas - media
+    return completas, media, vacías
 
 @login_required
 
@@ -82,19 +95,14 @@ def pelicula_detail(request, pk):
 
     # Calcular estrellas por reseña individual
     for r in reviews:
-        r.estrellas_completas = int(r.rating)
-        resto = r.rating - r.estrellas_completas
-        r.media_estrella = 1 if 0.25 <= resto < 0.75 else 0
-        r.estrellas_vacias = 5 - r.estrellas_completas - r.media_estrella
+        r.estrellas_completas, r.media_estrella, r.estrellas_vacias = calcular_estrellas(r.rating)
 
     # Obtener reseña del usuario actual (si existe)
     user_review = Review.objects.filter(pelicula=pelicula, user=request.user).first()
 
     # Calcular estrellas para el promedio general
     promedio = pelicula.promedio_rating or 0
-    estrellas_completas = floor(promedio)
-    media_estrella = 1 if 0.25 <= promedio - estrellas_completas < 0.75 else 0
-    estrellas_vacias = 5 - estrellas_completas - media_estrella
+    estrellas_completas, media_estrella, estrellas_vacias = calcular_estrellas(promedio)
 
     # Procesar formulario de reseña
     if request.method == 'POST':
@@ -116,6 +124,7 @@ def pelicula_detail(request, pk):
         'media_estrella': media_estrella,
         'estrellas_vacias': estrellas_vacias,
     })
+
 
 
 
@@ -161,6 +170,33 @@ def editar_perfil(request):
 
 class TopPageView(TemplateView):
     template_name = "top.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        año_actual = datetime.now().year
+
+        # Top del año
+        top_del_año = (
+            Review.objects
+            .filter(fecha_creacion__year=año_actual)
+            .values('pelicula__id', 'pelicula__titulo', 'pelicula__anio_lanzamiento')
+            .annotate(promedio=Avg('rating'), total=Count('id'))
+            .order_by('-promedio')[:10]
+        )
+
+        # Top general
+        top_general = (
+            Review.objects
+            .values('pelicula__id', 'pelicula__titulo', 'pelicula__anio_lanzamiento')
+            .annotate(promedio=Avg('rating'), total=Count('id'))
+            .order_by('-promedio')[:10]
+        )
+
+        context['top_del_año'] = top_del_año
+        context['top_general'] = top_general
+        context['año_actual'] = año_actual
+        return context
+
 
 class SignupView(FormView):
     template_name = "signup.html"

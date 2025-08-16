@@ -1,6 +1,60 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<h1>Reviews</h1>
-<p>Espacio para que los usuarios de MOVIE+ compartan sus opiniones sobre películas.!</p>
-{% endblock %}  
+
+    <h1 class="text-center text-accent mb-4">Reviews </h1>
+    <h3 class="text-center text-accent mb-5">Aquí podrás ver las reseñas de los usuarios:</h3>
+
+{% for review in reseñas %}
+    <div class="card bg-dark text-light border border-success border-opacity-25 shadow-sm mb-4 p-3 rounded-4">
+        <!-- Usuario, avatar y fecha -->
+        <div class="d-flex align-items-center mb-3">
+            <img src="{{ review.user.profile.avatar.url }}" alt="{{ review.user.username }}"
+                class="rounded-circle me-3 shadow-sm border border-secondary"
+                width="52" height="52" style="object-fit: cover;">
+            <div>
+                <strong class="d-block text-light">{{ review.user.username }}</strong>
+                <small class="d-block" style="color: #a8d5ba; font-size: 0.85rem;">
+                    {{ review.fecha_creacion|date:"d M Y" }}
+                </small>
+            </div>
+        </div>
+
+    <!-- Estrellas SVG -->
+    <div class="star-display d-flex gap-1 mb-2">
+        {% for i in "12345"|slice:":review.estrellas_completas" %}
+            <svg width="20" height="20" fill="#ffc107" viewBox="0 0 24 24">
+                <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+            </svg>
+        {% endfor %}
+
+        {% if review.media_estrella %}
+            <svg width="20" height="20" viewBox="0 0 24 24">
+                <defs>
+                    <linearGradient id="half-review">
+                        <stop offset="50%" stop-color="#ffc107"/>
+                        <stop offset="50%" stop-color="#e4e5e9"/>
+                    </linearGradient>
+                </defs>
+                <path fill="url(#half-review)" d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+            </svg>
+        {% endif %}
+
+        {% for i in "12345"|slice:":review.estrellas_vacias" %}
+            <svg width="20" height="20" fill="#e4e5e9" viewBox="0 0 24 24">
+                <path d="M12 .587l3.668 7.431L24 9.748l-6 5.848L19.335 24 12 20.201 4.665 24 6 15.596 0 9.748l8.332-1.73z"/>
+            </svg>
+        {% endfor %}
+    </div>
+
+
+        <!-- Comentario -->
+        {% if review.comentario %}
+            <p class="mb-0 text-light">{{ review.comentario }}</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p class="text-muted">No hay reseñas aún.</p>
+{% endfor %}
+
+{% endblock %}
