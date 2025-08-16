@@ -64,13 +64,25 @@ class PeliculasPageView(TemplateView):
         return context
 
 
+from math import floor
+
 class ReviewsPageView(TemplateView):
     template_name = "reviews.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reseñas'] = Review.objects.all().order_by('-fecha_creacion')
+        reseñas = Review.objects.all().order_by('-fecha_creacion')
+
+        for r in reseñas:
+            completas, media, vacías = calcular_estrellas(r.rating)
+            r.estrellas_completas = completas
+            r.media_estrella = bool(media)
+            r.estrellas_vacias = vacías
+
+        context['reseñas'] = reseñas
         return context
+
+
 
 
 class ReviewForm(forms.ModelForm):
@@ -178,7 +190,10 @@ class TopPageView(TemplateView):
         # Top del año
         top_del_año = (
             Review.objects
-            .filter(fecha_creacion__year=año_actual)
+            .filter(
+                fecha_creacion__year=año_actual,
+                pelicula__anio_lanzamiento=año_actual,
+            )
             .values('pelicula__id', 'pelicula__titulo', 'pelicula__anio_lanzamiento')
             .annotate(promedio=Avg('rating'), total=Count('id'))
             .order_by('-promedio')[:10]
