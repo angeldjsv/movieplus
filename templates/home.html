@@ -1,6 +1,13 @@
-{% extends "_base.html" %}
+{% extends '_base.html' %}
 
 {% block content %}
-<h1>Home Page</h1>
-<p>Welcome to the Home page of MOVIE+!</p>
-{% endblock %}  
+<div class="container mt-5">
+  <div class="card bg-dark text-light border-0 shadow-lg mx-auto text-center" style="max-width: 700px;">
+    <div class="card-body py-5">
+      <h1 class="mb-4">🎬 Bienvenido a <span class="text-success">MoviePlus</span></h1>
+      <p class="lead mb-4">Tu espacio para descubrir, reseñar y disfrutar películas con estilo.</p>
+      <a href="{% url 'top' %}" class="btn btn-success btn-lg px-5">Explorar películas</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

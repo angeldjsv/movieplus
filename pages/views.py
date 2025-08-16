@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, CreateView
-from .forms import ProfileForm
+from .forms import ProfileForm, RegistroForm
 from .models import Pelicula, Review, Profile
 from math import floor
 from django import forms
@@ -200,12 +200,13 @@ class TopPageView(TemplateView):
 
 class SignupView(FormView):
     template_name = "signup.html"
-    form_class = UserCreationForm
+    form_class = RegistroForm  # usa el formulario traducido
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
     
 class LoginView(DjangoLoginView):
     template_name = 'login.html'
