@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-m=aa6k9py_ok)idq+yks(y2b$!!73x8o$ay603bp7cc%n8q3m5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['movieplus.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'movieplus.pythonanywhere.com']
 
 
 # Application definition

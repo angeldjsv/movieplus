@@ -4,12 +4,18 @@
 <div class="container mt-5">
   <div class="card bg-dark text-light shadow-lg border-0 mx-auto" style="max-width: 600px;">
     <div class="card-body text-center">
-      <img src="{{ perfil.avatar.url }}" alt="Avatar" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #4CAF50;">
-      <h3 class="card-title mb-2">{{ perfil.user.username }}</h3>
-      <p class="text-muted mb-1">{{ perfil.user.email }}</p>
-      <hr class="bg-secondary">
-      <p class="mb-3"><strong>Biografía:</strong> {{ perfil.bio|default:"Sin biografía aún." }}</p>
-      <a href="{% url 'editar_perfil' %}" class="btn btn-outline-success px-4">Editar Perfil</a>
+      {% if perfil.avatar and perfil.avatar.url %}
+        <img src="{{ perfil.avatar.url }}" alt="Avatar" class="rounded-circle mb-3"
+          style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #4CAF50;">
+      {% else %}
+        <img src="{% static 'img/default-avatar.jpg' %}" alt="Avatar por defecto" class="rounded-circle mb-3"
+          style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #4CAF50;">
+      {% endif %}
+        <h3 class="card-title mb-2">{{ perfil.user.username }}</h3>
+        <p class="text-muted mb-1">{{ perfil.user.email }}</p>
+        <hr class="bg-secondary">
+        <p class="mb-3"><strong>Biografía:</strong> {{ perfil.bio|default:"Sin biografía aún." }}</p>
+        <a href="{% url 'editar_perfil' %}" class="btn btn-outline-success px-4">Editar Perfil</a>
     </div>
   </div>
 </div>
